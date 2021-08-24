@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     //private float _angle;
     private bool _flip;
     private Animator _animator;
-  
+    private SpriteRenderer _spriteRenderer;
 
 
     void Start()
@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         //_angle = -1000;
         _flip = true;
-
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -55,12 +55,16 @@ public class PlayerController : MonoBehaviour
         _rb.velocity = movement * speed * Time.fixedDeltaTime;
         if (x < 0 && !_flip)
         {
-            transform.Rotate(Vector3.up, 180);
+            //transform.Rotate(Vector3.up, 180);
+            
+            _spriteRenderer.flipX = _flip;
             _flip = true;
         }
         else if (x > 0 && _flip)
         {
-            transform.Rotate(Vector3.up, 180);
+            //transform.Rotate(Vector3.up, 180);
+            
+            _spriteRenderer.flipX = _flip;
             _flip = false;
         }
     }

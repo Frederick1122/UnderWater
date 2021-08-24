@@ -28,7 +28,8 @@ public class TargetArea : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy")) {
             if (!turrelScript.target.CompareTag("Enemy"))
             {
-                other.gameObject.GetComponent<EnemyController>().OnTarget();
+                
+                other.gameObject.GetComponentInParent<EnemyController>().OnTarget();
                 turrelScript.Targetting(other.gameObject);
                 if (!_reload)
                 {

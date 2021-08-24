@@ -15,7 +15,7 @@ public class Turrel : MonoBehaviour
 
     private bool _turrelRotateFlag;
     private bool _turrelInEnemyFlag;
-
+    private SpriteRenderer _spriteRenderer;
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("EnemyTurrelArea"))
@@ -23,7 +23,7 @@ public class Turrel : MonoBehaviour
             if (other.GetComponentInParent<EnemyController>().triggerForTurrel == other.gameObject.GetComponent<CircleCollider2D>())
             {
                 _turrelInEnemyFlag = true;
-
+                Debug.Log("Yes");
             }
         }
     }
@@ -34,6 +34,8 @@ public class Turrel : MonoBehaviour
             if (collision.GetComponentInParent<EnemyController>().triggerForTurrel == collision.gameObject.GetComponent<CircleCollider2D>())
             {
                 _turrelInEnemyFlag = false;
+                Debug.Log("No");
+
             }
 
         }
@@ -42,6 +44,7 @@ public class Turrel : MonoBehaviour
     private void Start()
     {
         _standartTarget = target;
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     void FixedUpdate()
@@ -60,17 +63,20 @@ public class Turrel : MonoBehaviour
         }
         if (transform.position.x - target.transform.position.x < 0 && !_turrelRotateFlag)
         {
-            transform.Rotate(Vector3.up, 180);
             _turrelRotateFlag = true;
+            _spriteRenderer.flipX = _turrelRotateFlag;
+            
         }
         else if (transform.position.x - target.transform.position.x > 0 && _turrelRotateFlag)
         {
-            transform.Rotate(Vector3.up, 180);
             _turrelRotateFlag = false;
+            _spriteRenderer.flipX = _turrelRotateFlag;
+
+           
         }
         var _target = new Vector3(target.transform.position.x, target.transform.position.y, transform.position.z);
         var heading = transform.position - _target;
-        var enemyControl = target.GetComponent<EnemyController>() != null ? target.GetComponent<EnemyController>() : null;
+        var enemyControl = target.GetComponent<EnemyController>() != null ? target.GetComponent<EnemyController>() : target.GetComponentInParent<EnemyController>() != null ? target.GetComponentInParent<EnemyController>() : null;
 
         if (enemyControl != null && !_turrelInEnemyFlag)
         {
@@ -81,7 +87,7 @@ public class Turrel : MonoBehaviour
 
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, _target, target.GetComponent<Rigidbody2D>().velocity.magnitude * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, _target, speed * 2 * Time.deltaTime);
             }
         }
         else if(enemyControl == null)

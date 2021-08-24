@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     [NonSerialized] public Vector3 target;
     [NonSerialized] public float speed;
     [NonSerialized] public float lifetime;
-
+    [SerializeField] GameObject DeathBullet;
     private Rigidbody2D _rb;
     
 
@@ -22,7 +22,8 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            collision.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
+            collision.gameObject.GetComponentInParent<EnemyController>().TakeDamage(damage);
+            Instantiate(DeathBullet, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
