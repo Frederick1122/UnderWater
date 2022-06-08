@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 150551491}
   - component: {fileID: 150551490}
   - component: {fileID: 150551492}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 862515534}
   - component: {fileID: 1176359406}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ForTurrel
   m_TagString: EnemyTurrelArea
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7602108239462845617}
   - component: {fileID: 7602108239462845630}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TargetIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 7602108240113220070}
   - component: {fileID: 7602108240113220058}
   - component: {fileID: 27768465}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 7602108240732411591}
   - component: {fileID: 7602108240732411705}
   - component: {fileID: 7602108240732411590}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TargetArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}

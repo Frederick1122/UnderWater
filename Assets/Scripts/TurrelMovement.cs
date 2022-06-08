@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 
-public class TurrelController : MonoBehaviour
+public class TurrelMovement : MonoBehaviour
 {
-    //TODO: разнести этот скрипт по нескольким
     [SerializeField] private GameObject _standartTarget;
     [SerializeField] private GameObject _player;
-    
-    [SerializeField] private float maxDistance;
-    [SerializeField] private float speed;
+
+    [SerializeField] private float _maxDistance;
+    [SerializeField] private float _speed;
 
     private GameObject _target;
     private bool _turrelRotateFlag;
     private bool _turrelInEnemyFlag;
     private SpriteRenderer _spriteRenderer;
+
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("EnemyTurrelArea"))
@@ -23,6 +23,7 @@ public class TurrelController : MonoBehaviour
             }
         }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("EnemyTurrelArea"))
@@ -37,11 +38,6 @@ public class TurrelController : MonoBehaviour
     private void Start()
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-    }
-
-    public GameObject GetTarget()
-    {
-        return _target;
     }
 
     void FixedUpdate()
@@ -60,14 +56,14 @@ public class TurrelController : MonoBehaviour
         {
             _turrelRotateFlag = true;
             _spriteRenderer.flipX = _turrelRotateFlag;
-            
+
         }
         else if (transform.position.x - this._target.transform.position.x > 0 && _turrelRotateFlag)
         {
             _turrelRotateFlag = false;
             _spriteRenderer.flipX = _turrelRotateFlag;
 
-           
+
         }
         var _target = new Vector3(this._target.transform.position.x, this._target.transform.position.y, transform.position.z);
         var heading = transform.position - _target;
@@ -75,35 +71,30 @@ public class TurrelController : MonoBehaviour
 
         if (enemyControl != null && !_turrelInEnemyFlag)
         {
-            if (heading.sqrMagnitude < maxDistance * maxDistance)
+            if (heading.sqrMagnitude < _maxDistance * _maxDistance)
             {
-                transform.position = Vector3.MoveTowards(transform.position, _target, speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, _target, _speed * Time.deltaTime);
             }
 
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, _target, speed * 2 * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, _target, _speed * 2 * Time.deltaTime);
             }
         }
-        else if(enemyControl == null)
+        else if (enemyControl == null)
         {
-            var a = _player.GetComponent<Rigidbody2D>().velocity.magnitude > 0 ? _player.GetComponent<Rigidbody2D>().velocity.magnitude : speed;
+            var a = _player.GetComponent<Rigidbody2D>().velocity.magnitude > 0 ? _player.GetComponent<Rigidbody2D>().velocity.magnitude : _speed;
             transform.position = Vector3.MoveTowards(transform.position, _target, a * Time.deltaTime);
         }
     }
 
-    public void Targetting(GameObject _target)
+    public GameObject GetTarget()
     {
-        this._target = _target;
+        return _target;
     }
-    public void Attack(GameObject _target, GameObject bullet, float speedBullet, int damage, float lifetimeBullet)
+    public void SetTarget(GameObject newTarget)
     {
-        var go = Instantiate(bullet, transform.position, Quaternion.identity);
-        var bulletScript = go.GetComponent<Bullet>();
-        bulletScript.target = _target.transform.position;
-        bulletScript.speed = speedBullet;
-        bulletScript.damage = damage;
-        bulletScript.lifetime = lifetimeBullet;
+        _target = newTarget;
     }
 }
 

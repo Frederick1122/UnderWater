@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyTargetArea : MonoBehaviour
 {
@@ -9,7 +7,6 @@ public class EnemyTargetArea : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-
             enemyController.target = collision.gameObject;
         }
     }

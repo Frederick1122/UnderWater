@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 40405448}
   - component: {fileID: 40405449}
   - component: {fileID: 40405447}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -787,9 +787,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 372766242}
-  - component: {fileID: 372766243}
   - component: {fileID: 372766241}
   - component: {fileID: 372766244}
+  - component: {fileID: 372766243}
   m_Layer: 0
   m_Name: Turrel
   m_TagString: Untagged
@@ -839,13 +839,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 372766240}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f11200289c958f4f91cab490185cb50, type: 3}
+  m_Script: {fileID: 11500000, guid: 18cf8b3244e41424b97a9b455a7b0205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _standartTarget: {fileID: 1879145703}
   _player: {fileID: 40405443}
-  maxDistance: 2
-  speed: 5
+  _maxDistance: 3
+  _speed: 1
 --- !u!50 &372766244
 Rigidbody2D:
   serializedVersion: 4
@@ -7299,16 +7299,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1475432351}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130fd431ea92ff6418688f6e2e138485, type: 3}
+  m_Script: {fileID: 11500000, guid: eae05e8a49e5f0940b68c0ebeb17c000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turrelScript: {fileID: 372766243}
-  bullet: {fileID: 8531532287893069918, guid: 746855e2360415f44855cb876b75a805, type: 3}
-  speedBullet: 100
-  reloadTime: 1
-  maxDamage: 2
-  minDamage: 5
-  lifetimeBullet: 1
+  _bullet: {fileID: 8531532287893069918, guid: 746855e2360415f44855cb876b75a805, type: 3}
+  _speedBullet: 5
+  _reloadTime: 2
+  _lifetimeBullet: 2
+  _maxDamage: 3
+  _minDamage: 1
 --- !u!58 &1475432354
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -7381,7 +7380,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1721688934}
   - component: {fileID: 1721688935}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7462,7 +7461,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1879145704}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TurrelPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9342,7 +9341,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2071636105}
   - component: {fileID: 2071636106}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

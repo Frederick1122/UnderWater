@@ -16,12 +16,11 @@ public class EnemyController : MonoBehaviour
 
     [NonSerialized] public GameObject target;
 
-    private Rigidbody2D _rigidbody;
+    //private Rigidbody2D _rigidbody;
     [SerializeField] private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private NavMeshAgent _navMeshAgent;
-    private bool _animFlag;
-    private bool _rotateFlag;
+    private bool _isStay;
     IEnumerator DamageCoroutine(float t)
     {
         while (t < 1.0f)
@@ -36,8 +35,7 @@ public class EnemyController : MonoBehaviour
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _navMeshAgent = GetComponentInChildren<NavMeshAgent>();
-        _rigidbody = GetComponentInChildren<Rigidbody2D>();
-        _animFlag = false;
+        //_rigidbody = GetComponentInChildren<Rigidbody2D>();
     }
     void Update()
     {
@@ -53,38 +51,34 @@ public class EnemyController : MonoBehaviour
     }
     private void MovementLogic()
     {
-
         if (target != null)
         {
+            _isStay = false;
             _navMeshAgent.SetDestination(target.transform.position);
-            
-            if (!_animFlag)
+            _navMeshAgent.speed = _speed;
+            if (!_animator.GetBool("Walk"))
             {
                 _animator.SetBool("Walk", true);
-                _animFlag = true;
             }
-            if (transform.position.x - target.transform.position.x < 0 && !_rotateFlag)
+            if (transform.position.x - target.transform.position.x < 0 && !_spriteRenderer.flipX)
             {
-                _rotateFlag = true;
-                _spriteRenderer.flipX = _rotateFlag;
+                _spriteRenderer.flipX = true;
             }
-            else if (transform.position.x - target.transform.position.x > 0 && _rotateFlag)
+            else if (transform.position.x - target.transform.position.x > 0 && _spriteRenderer.flipX)
             {
-                _rotateFlag = false;
-                _spriteRenderer.flipX = _rotateFlag;
+                _spriteRenderer.flipX = false;
             }
+            return;
         }
-        else
+        if(!_isStay)
         {
-            _rigidbody.velocity = Vector2.zero;
-            if (_animFlag)
+            _isStay = true;
+            _navMeshAgent.speed = 0;
+            if (_animator.GetBool("Walk"))
             {
                 _animator.SetBool("Walk", false);
-                _animFlag = false;
             }
-
         }
-
     }
     public void TakeDamage(int damage)
     {

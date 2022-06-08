@@ -17,9 +17,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - EnemiesIgnorePlayer
+  - EnemiesNotIgnorePlayer
+  - Player
   - 
   - 
   - 
