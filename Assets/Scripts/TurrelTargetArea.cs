@@ -1,12 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class TargetArea : MonoBehaviour
+public class TurrelTargetArea : MonoBehaviour
 {
 
     [Header("TurrelPreferences")]
-    [SerializeField] private Turrel turrelScript;
+    [SerializeField] private TurrelController turrelScript;
     [SerializeField] private GameObject bullet;
     [SerializeField] private float speedBullet;
     [SerializeField] private float reloadTime;
@@ -25,11 +24,12 @@ public class TargetArea : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
+        GameObject target = turrelScript.GetTarget();
         if (other.gameObject.CompareTag("Enemy")) {
-            if (!turrelScript.target.CompareTag("Enemy"))
+            if (!target.CompareTag("Enemy"))
             {
                 
-                other.gameObject.GetComponentInParent<EnemyController>().OnTarget();
+                other.gameObject.GetComponentInParent<EnemyController>().CaughtInCrosshair();
                 turrelScript.Targetting(other.gameObject);
                 if (!_reload)
                 {
@@ -41,7 +41,7 @@ public class TargetArea : MonoBehaviour
             }
             else
             {
-                if (other.gameObject == turrelScript.target)
+                if (other.gameObject == target)
                 {
                     if (!_reload)
                     {

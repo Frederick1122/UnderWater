@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Turrel : MonoBehaviour
+public class TurrelController : MonoBehaviour
 {
-
-
-    private GameObject _standartTarget;
-    public GameObject player;
-    public GameObject target;
+    //TODO: разнести этот скрипт по нескольким
+    [SerializeField] private GameObject _standartTarget;
+    [SerializeField] private GameObject _player;
+    
     [SerializeField] private float maxDistance;
     [SerializeField] private float speed;
 
+    private GameObject _target;
     private bool _turrelRotateFlag;
     private bool _turrelInEnemyFlag;
     private SpriteRenderer _spriteRenderer;
@@ -23,7 +20,6 @@ public class Turrel : MonoBehaviour
             if (other.GetComponentInParent<EnemyController>().triggerForTurrel == other.gameObject.GetComponent<CircleCollider2D>())
             {
                 _turrelInEnemyFlag = true;
-                Debug.Log("Yes");
             }
         }
     }
@@ -34,49 +30,48 @@ public class Turrel : MonoBehaviour
             if (collision.GetComponentInParent<EnemyController>().triggerForTurrel == collision.gameObject.GetComponent<CircleCollider2D>())
             {
                 _turrelInEnemyFlag = false;
-                Debug.Log("No");
-
             }
-
         }
     }
 
     private void Start()
     {
-        _standartTarget = target;
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+    }
+
+    public GameObject GetTarget()
+    {
+        return _target;
     }
 
     void FixedUpdate()
     {
-
         MovementLogic();
-
     }
 
     private void MovementLogic()
     {
-        if (target == null)
+        if (this._target == null)
         {
-            target = _standartTarget;
+            this._target = _standartTarget;
             _turrelInEnemyFlag = false;
         }
-        if (transform.position.x - target.transform.position.x < 0 && !_turrelRotateFlag)
+        if (transform.position.x - this._target.transform.position.x < 0 && !_turrelRotateFlag)
         {
             _turrelRotateFlag = true;
             _spriteRenderer.flipX = _turrelRotateFlag;
             
         }
-        else if (transform.position.x - target.transform.position.x > 0 && _turrelRotateFlag)
+        else if (transform.position.x - this._target.transform.position.x > 0 && _turrelRotateFlag)
         {
             _turrelRotateFlag = false;
             _spriteRenderer.flipX = _turrelRotateFlag;
 
            
         }
-        var _target = new Vector3(target.transform.position.x, target.transform.position.y, transform.position.z);
+        var _target = new Vector3(this._target.transform.position.x, this._target.transform.position.y, transform.position.z);
         var heading = transform.position - _target;
-        var enemyControl = target.GetComponent<EnemyController>() != null ? target.GetComponent<EnemyController>() : target.GetComponentInParent<EnemyController>() != null ? target.GetComponentInParent<EnemyController>() : null;
+        var enemyControl = this._target.GetComponent<EnemyController>() != null ? this._target.GetComponent<EnemyController>() : this._target.GetComponentInParent<EnemyController>() != null ? this._target.GetComponentInParent<EnemyController>() : null;
 
         if (enemyControl != null && !_turrelInEnemyFlag)
         {
@@ -92,14 +87,14 @@ public class Turrel : MonoBehaviour
         }
         else if(enemyControl == null)
         {
-            var a = player.GetComponent<Rigidbody2D>().velocity.magnitude > 0 ? player.GetComponent<Rigidbody2D>().velocity.magnitude : speed;
+            var a = _player.GetComponent<Rigidbody2D>().velocity.magnitude > 0 ? _player.GetComponent<Rigidbody2D>().velocity.magnitude : speed;
             transform.position = Vector3.MoveTowards(transform.position, _target, a * Time.deltaTime);
         }
     }
 
     public void Targetting(GameObject _target)
     {
-        target = _target;
+        this._target = _target;
     }
     public void Attack(GameObject _target, GameObject bullet, float speedBullet, int damage, float lifetimeBullet)
     {
@@ -109,9 +104,6 @@ public class Turrel : MonoBehaviour
         bulletScript.speed = speedBullet;
         bulletScript.damage = damage;
         bulletScript.lifetime = lifetimeBullet;
-        
-
-        //target.GetComponent<EnemyController>().OnTarget();
     }
 }
 
