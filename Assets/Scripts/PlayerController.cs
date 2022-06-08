@@ -1,20 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class PlayerController : MonoBehaviour
 {
-    public Joystick moveJoystick;
-    public Joystick fireJoystick;
-    public GameObject weapon;
-    public float speed;
+    [SerializeField] private float speed;
 
+    private Joystick _moveJoystick;
 
-
-
-    private Rigidbody2D _rb;
-    //private float _angle;
+    private Rigidbody2D _rigidBody;
     private bool _flip;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
@@ -22,28 +17,22 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        //_angle = -1000;
-        _flip = true;
         _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    private void Update()
-    {
-        // WeaponLogic();
+        _moveJoystick = UIManager.Instance.GetJoystick();
+        _flip = true;
     }
     void FixedUpdate()
     {
         MovementLogic();
-
     }
 
     private void MovementLogic()
     {
-        var x = moveJoystick.Horizontal;
-        var y = moveJoystick.Vertical;
-        Vector3 movement = new Vector3(x, y, transform.position.z);
+        var xMovement = _moveJoystick.Horizontal;
+        var yMovement = _moveJoystick.Vertical;
+        Vector3 movement = new Vector3(xMovement, yMovement, transform.position.z);
         if (movement != new Vector3(0, 0, transform.position.z) && !_animator.GetBool("isWalk"))
         {
             _animator.SetBool("isWalk", true);
@@ -52,52 +41,16 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetBool("isWalk", false);
         }
-        _rb.velocity = movement * speed * Time.fixedDeltaTime;
-        if (x < 0 && !_flip)
+        _rigidBody.velocity = movement * speed * Time.fixedDeltaTime;
+        if (xMovement < 0 && !_flip)
         {
-            //transform.Rotate(Vector3.up, 180);
-            
             _spriteRenderer.flipX = _flip;
             _flip = true;
         }
-        else if (x > 0 && _flip)
+        else if (xMovement > 0 && _flip)
         {
-            //transform.Rotate(Vector3.up, 180);
-            
             _spriteRenderer.flipX = _flip;
             _flip = false;
         }
     }
-    /*private void WeaponLogic()
-    {
-        var a = (fireJoystick.Vertical > 0 ? (int)Vector3.Angle(transform.right, fireJoystick.Direction) : -(int)Vector3.Angle(transform.right, fireJoystick.Direction));
-        Debug.Log(a);
-       
-        if (_angle == -1000)
-        {
-            weapon.transform.Rotate(Vector3.up, a);
-            _angle = a;
-        }
-        else if (a != _angle && fireJoystick.Vertical + fireJoystick.Horizontal != 0)
-        {
-            weapon.transform.Rotate(Vector3.forward, a - _angle);
-            _angle = a;
-           
-        }
-        if (fireJoystick.Horizontal < 0 && !_flip)
-        {
-            gameObject.transform.Rotate(Vector3.up, 180);
-           
-            _flip = true;
-            weapon.transform.position = new Vector3(weapon.transform.position.x, weapon.transform.position.y, -2);
-
-        }
-        else if (fireJoystick.Horizontal > 0 && _flip)
-        {
-            gameObject.transform.Rotate(Vector3.up, 180);
-            weapon.transform.position = new Vector3(weapon.transform.position.x, weapon.transform.position.y, -1);
-
-            _flip = false;
-        }
-    }*/
 }
