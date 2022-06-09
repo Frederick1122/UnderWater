@@ -16,7 +16,7 @@ public class TurrelMovement : MonoBehaviour
     private void Start()
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        _turrelPosition = _standartTurrelPosition
+        _turrelPosition = _standartTurrelPosition;
     }
 
     void FixedUpdate()
