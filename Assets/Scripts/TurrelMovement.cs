@@ -2,100 +2,67 @@
 
 public class TurrelMovement : MonoBehaviour
 {
-    [SerializeField] private GameObject _standartTarget;
+    [SerializeField] private GameObject _standartTurrelPosition;
     [SerializeField] private GameObject _player;
 
     [SerializeField] private float _maxDistance;
     [SerializeField] private float _speed;
 
-    private GameObject _target;
-    private bool _turrelRotateFlag;
-    private bool _turrelInEnemyFlag;
+    private GameObject _turrelPosition;
+    private GameObject _turrelTarget;
     private SpriteRenderer _spriteRenderer;
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("EnemyTurrelArea"))
-        {
-            if (other.GetComponentInParent<EnemyController>().triggerForTurrel == other.gameObject.GetComponent<CircleCollider2D>())
-            {
-                _turrelInEnemyFlag = true;
-            }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("EnemyTurrelArea"))
-        {
-            if (collision.GetComponentInParent<EnemyController>().triggerForTurrel == collision.gameObject.GetComponent<CircleCollider2D>())
-            {
-                _turrelInEnemyFlag = false;
-            }
-        }
-    }
 
     private void Start()
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _turrelPosition = _standartTurrelPosition
     }
 
     void FixedUpdate()
     {
-        MovementLogic();
+        
+        if(_turrelTarget != null)
+            Rotation(_turrelTarget.transform);
+        else
+            Rotation(_turrelPosition.transform);
+
+        Movement();
     }
 
-    private void MovementLogic()
+    private void Movement()
     {
-        if (this._target == null)
+        Vector3 target = new Vector3(_turrelPosition.transform.position.x, _turrelPosition.transform.position.y, transform.position.z);
+
+        var a = _player.GetComponent<Rigidbody2D>().velocity.magnitude > 0 ? _player.GetComponent<Rigidbody2D>().velocity.magnitude : _speed;
+        transform.position = Vector3.MoveTowards(transform.position, target, a * Time.deltaTime);
+    }
+
+    private void Rotation(Transform _targetPosition)
+    {
+        if (transform.position.x - _targetPosition.position.x < 0 && !_spriteRenderer.flipX)
         {
-            this._target = _standartTarget;
-            _turrelInEnemyFlag = false;
+            _spriteRenderer.flipX = true;
         }
-        if (transform.position.x - this._target.transform.position.x < 0 && !_turrelRotateFlag)
+        else if (transform.position.x - _targetPosition.position.x > 0 && _spriteRenderer.flipX)
         {
-            _turrelRotateFlag = true;
-            _spriteRenderer.flipX = _turrelRotateFlag;
-
-        }
-        else if (transform.position.x - this._target.transform.position.x > 0 && _turrelRotateFlag)
-        {
-            _turrelRotateFlag = false;
-            _spriteRenderer.flipX = _turrelRotateFlag;
-
-
-        }
-        var _target = new Vector3(this._target.transform.position.x, this._target.transform.position.y, transform.position.z);
-        var heading = transform.position - _target;
-        var enemyControl = this._target.GetComponent<EnemyController>() != null ? this._target.GetComponent<EnemyController>() : this._target.GetComponentInParent<EnemyController>() != null ? this._target.GetComponentInParent<EnemyController>() : null;
-
-        if (enemyControl != null && !_turrelInEnemyFlag)
-        {
-            if (heading.sqrMagnitude < _maxDistance * _maxDistance)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, _target, _speed * Time.deltaTime);
-            }
-
-            else
-            {
-                transform.position = Vector3.MoveTowards(transform.position, _target, _speed * 2 * Time.deltaTime);
-            }
-        }
-        else if (enemyControl == null)
-        {
-            var a = _player.GetComponent<Rigidbody2D>().velocity.magnitude > 0 ? _player.GetComponent<Rigidbody2D>().velocity.magnitude : _speed;
-            transform.position = Vector3.MoveTowards(transform.position, _target, a * Time.deltaTime);
+            _spriteRenderer.flipX = false;
         }
     }
 
     public GameObject GetTarget()
     {
-        return _target;
+        return _turrelTarget;
     }
     public void SetTarget(GameObject newTarget)
     {
-        _target = newTarget;
+        _turrelTarget = newTarget;
     }
+    public void SetTarget()
+    {
+        _turrelTarget = null;
+    }
+
 }
 
 

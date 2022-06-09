@@ -16,7 +16,6 @@ public class EnemyController : MonoBehaviour
 
     [NonSerialized] public GameObject target;
 
-    //private Rigidbody2D _rigidbody;
     [SerializeField] private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private NavMeshAgent _navMeshAgent;
@@ -35,7 +34,6 @@ public class EnemyController : MonoBehaviour
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _navMeshAgent = GetComponentInChildren<NavMeshAgent>();
-        //_rigidbody = GetComponentInChildren<Rigidbody2D>();
     }
     void Update()
     {
@@ -47,39 +45,47 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        MovementLogic();
-    }
-    private void MovementLogic()
-    {
         if (target != null)
         {
             _isStay = false;
-            _navMeshAgent.SetDestination(target.transform.position);
-            _navMeshAgent.speed = _speed;
-            if (!_animator.GetBool("Walk"))
-            {
-                _animator.SetBool("Walk", true);
-            }
-            if (transform.position.x - target.transform.position.x < 0 && !_spriteRenderer.flipX)
-            {
-                _spriteRenderer.flipX = true;
-            }
-            else if (transform.position.x - target.transform.position.x > 0 && _spriteRenderer.flipX)
-            {
-                _spriteRenderer.flipX = false;
-            }
+            Movement();
             return;
         }
-        if(!_isStay)
+        if (!_isStay)
         {
-            _isStay = true;
-            _navMeshAgent.speed = 0;
-            if (_animator.GetBool("Walk"))
-            {
-                _animator.SetBool("Walk", false);
-            }
+            Rest();
         }
     }
+
+    private void Rest()
+    {
+        _isStay = true;
+        _navMeshAgent.speed = 0;
+        if (_animator.GetBool("Walk"))
+        {
+            _animator.SetBool("Walk", false);
+        }
+    }
+
+    private void Movement()
+    {
+        _navMeshAgent.SetDestination(target.transform.position);
+        _navMeshAgent.speed = _speed;
+        if (!_animator.GetBool("Walk"))
+        {
+            _animator.SetBool("Walk", true);
+        }
+        if (transform.position.x - target.transform.position.x < 0 && !_spriteRenderer.flipX)
+        {
+            _spriteRenderer.flipX = true;
+        }
+        else if (transform.position.x - target.transform.position.x > 0 && _spriteRenderer.flipX)
+        {
+            _spriteRenderer.flipX = false;
+        }
+        return;
+    }
+
     public void TakeDamage(int damage)
     {
         _hp -= damage;

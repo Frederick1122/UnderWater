@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TurrelAttack : MonoBehaviour
 {
-    
+
     [SerializeField] private GameObject _bullet;
 
     [Header("BulletPreferences")]
@@ -17,44 +17,42 @@ public class TurrelAttack : MonoBehaviour
 
     private TurrelMovement _turrelMovement;
     private bool _reload;
-
-    IEnumerator ReloadCoroutine(float time)
-    {
-        _reload = true;
-        yield return new WaitForSeconds(time);
-        _reload = false;
-    }
+    private GameObject _target;
 
     private void Start()
     {
         _turrelMovement = GetComponentInParent<TurrelMovement>();
     }
-    
+    IEnumerator ReloadCoroutine(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _reload = false;
+    }
+
     private void OnTriggerStay2D(Collider2D other)
     {
-        GameObject target = _turrelMovement.GetTarget();
-        if (other.gameObject.CompareTag("Enemy"))
+        if (!other.gameObject.CompareTag("Enemy")) return;
+        if (_reload) return;
+
+        if ((object)_target == null || !_target.CompareTag("Enemy"))
         {
-            if (!target.CompareTag("Enemy"))
-            {
-                other.gameObject.GetComponentInParent<EnemyController>().CaughtInCrosshair();
-                _turrelMovement.SetTarget(other.gameObject);
-                if (_reload) return;
-                Attack(other.gameObject, _bullet, _speedBullet, _lifetimeBullet);
-            }
-            else
-            {
-                if (other.gameObject == target)
-                {
-                    if (!_reload) return;
-                    Attack(other.gameObject, _bullet, _speedBullet, _lifetimeBullet);
-                }
-            }
+            other.gameObject.GetComponentInParent<EnemyController>().CaughtInCrosshair();
+            _turrelMovement.SetTarget(other.gameObject);
+            _target = other.gameObject;
+            Attack(other.gameObject, _bullet, _speedBullet, _lifetimeBullet);
+            return;
+        }
+
+        if (other.gameObject == _target)
+        {
+            Attack(other.gameObject, _bullet, _speedBullet, _lifetimeBullet);
         }
     }
 
     public void Attack(GameObject _target, GameObject bullet, float speedBullet, float lifetimeBullet)
     {
+        _reload = true;
+
         var damage = Random.Range(_minDamage, _maxDamage);
         var bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
         bulletInstance.GetComponent<Bullet>().InstatiateBullet(damage, _target.transform.position, speedBullet, lifetimeBullet);

@@ -844,7 +844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _standartTarget: {fileID: 1879145703}
   _player: {fileID: 40405443}
-  _maxDistance: 3
+  _maxDistance: 1
   _speed: 1
 --- !u!50 &372766244
 Rigidbody2D:
@@ -7270,7 +7270,7 @@ GameObject:
   - component: {fileID: 1475432354}
   - component: {fileID: 1475432353}
   m_Layer: 0
-  m_Name: TargetArea
+  m_Name: TurrelAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7284,7 +7284,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1475432351}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.59, y: -1.26, z: 0.06}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children: []
   m_Father: {fileID: 372766242}
