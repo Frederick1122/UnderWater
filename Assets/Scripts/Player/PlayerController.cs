@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(SpriteRenderer))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    //Kostyl
+    [SerializeField] string _UIScene;
+    //Kostyl
+    [SerializeField] private float _speed;
 
     private Joystick _moveJoystick;
 
@@ -14,15 +19,24 @@ public class PlayerController : MonoBehaviour
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
 
-
-    void Start()
+    private IEnumerator Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _moveJoystick = UIManager.Instance.GetJoystick();
+        _moveJoystick = UIManager.Instance?.GetJoystick();
+        //Kostyl
+        if(_moveJoystick == null)
+        {
+            SceneManager.LoadSceneAsync(_UIScene, LoadSceneMode.Additive);
+            yield return new WaitForSeconds(0.5f);
+            _moveJoystick = UIManager.Instance?.GetJoystick();
+        }
+        Debug.Log(_moveJoystick);
+        //Kostyl
         _flip = true;
     }
+
     void FixedUpdate()
     {
         MovementLogic();
@@ -30,6 +44,7 @@ public class PlayerController : MonoBehaviour
 
     private void MovementLogic()
     {
+        if (_moveJoystick == null) return;
         var xMovement = _moveJoystick.Horizontal;
         var yMovement = _moveJoystick.Vertical;
         Vector3 movement = new Vector3(xMovement, yMovement, transform.position.z);
@@ -41,7 +56,7 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetBool("isWalk", false);
         }
-        _rigidBody.velocity = movement * speed * Time.fixedDeltaTime;
+        _rigidBody.velocity = movement * _speed * Time.fixedDeltaTime;
         if (xMovement < 0 && !_flip)
         {
             _spriteRenderer.flipX = _flip;
