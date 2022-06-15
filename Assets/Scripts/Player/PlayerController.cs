@@ -32,7 +32,6 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             _moveJoystick = UIManager.Instance?.GetJoystick();
         }
-        Debug.Log(_moveJoystick);
         //Kostyl
         _flip = true;
     }

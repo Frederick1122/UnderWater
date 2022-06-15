@@ -295,15 +295,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4528d51a2e82a204c9b855e9649e1938, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoomPrefabs:
+  _roomPrefabs:
   - {fileID: 8635692858689045062, guid: ff42f02a9970bba4ab6d295b5569b9d8, type: 3}
-  - {fileID: 2163945575818864394, guid: dae147993cd2dfd4e9790e00257ebe05, type: 3}
-  - {fileID: 6800424669814340970, guid: a65493dd209d64945bc9883edf3c157a, type: 3}
-  - {fileID: 8434300969937967655, guid: d388f374364aa6a498b017aa6d532083, type: 3}
-  - {fileID: 6226128771951908258, guid: 34c92bf9fb71cfd4cb52e393b3de15d3, type: 3}
-  - {fileID: 5338350493718567780, guid: 03611980d98728642a613917c8a93e1f, type: 3}
-  - {fileID: 6041670193464372873, guid: 5a55dd51ad2c10d40aa0b8706db03c5e, type: 3}
-  StartingRoom: {fileID: 824336800}
+  _startingRoom: {fileID: 824336800}
+  _dungeonConfig: {fileID: 11400000, guid: bafeeabcc1ffbe4429b801546eee4174, type: 2}
 --- !u!4 &1985580776
 Transform:
   m_ObjectHideFlags: 0
